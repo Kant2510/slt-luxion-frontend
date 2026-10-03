@@ -134,14 +134,14 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-101 bg-slate-dark/98 backdrop-blur-[30px] flex flex-col items-center justify-center gap-8"
+            className="fixed inset-0 z-101 bg-white flex flex-col items-center justify-center gap-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             <button
-              className="absolute top-6 right-6 text-white p-2 hover:opacity-80 cursor-pointer"
+              className="absolute top-6 right-6 text-slate-dark p-2 hover:opacity-80 cursor-pointer"
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu"
               type="button"

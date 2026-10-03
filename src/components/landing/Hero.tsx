@@ -35,7 +35,7 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="wrap relative z-10 w-full flex">
+      <div className="wrap relative z-10 flex w-full max-[640px]:w-full! max-[640px]:px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
