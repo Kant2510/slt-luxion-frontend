@@ -3,35 +3,40 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Product, SortOption } from '@/types/product';
 import { CATEGORIES } from '@/data/products';
+import { getProducts } from '@/services/productApi';
 import ProductCard from '@/components/products/ProductCard';
 import ProductFilter from '@/components/products/ProductFilter';
 import Pagination from '@/components/products/Pagination';
-import { PackageSearch } from 'lucide-react';
+import { PackageSearch, AlertCircle, RefreshCw } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 28; // 7 rows x 4 columns = 28 products max per page
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [selectedSort, setSelectedSort] = useState<SortOption>('recommend');
+  const [selectedSort, setSelectedSort] = useState<SortOption>('default');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/products.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const fetchProductList = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getProducts();
+      setProducts(data);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message || 'Không thể tải danh sách sản phẩm từ máy chủ.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProducts();
+  useEffect(() => {
+    fetchProductList();
   }, []);
 
   // Filter and sort products
@@ -49,24 +54,28 @@ export default function ProductsPage() {
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
-          p.tagline.toLowerCase().includes(q) ||
-          p.shortDescription.toLowerCase().includes(q)
+          (p.tagline && p.tagline.toLowerCase().includes(q)) ||
+          (p.notes && p.notes.toLowerCase().includes(q))
       );
     }
 
     // 3. Sorting
     switch (selectedSort) {
-      case 'recommend':
-        result.sort((a, b) => (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0) || b.rating - a.rating);
+      case 'default':
+        result.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
         break;
-      case 'top-seller':
-        result.sort((a, b) => (b.isTopSeller ? 1 : 0) - (a.isTopSeller ? 1 : 0) || b.reviewCount - a.reviewCount);
+      case 'name-asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case 'price-asc':
-        result.sort((a, b) => a.price - b.price);
+      case 'name-desc':
+        result.sort((a, b) => b.name.localeCompare(a.name));
         break;
-      case 'price-desc':
-        result.sort((a, b) => b.price - a.price);
+      case 'newest':
+        result.sort((a, b) => {
+          const dateA = a.published_at ? new Date(a.published_at).getTime() : 0;
+          const dateB = b.published_at ? new Date(b.published_at).getTime() : 0;
+          return dateB - dateA;
+        });
         break;
       default:
         break;
@@ -75,7 +84,6 @@ export default function ProductsPage() {
     return result;
   }, [selectedCategory, selectedSort, searchQuery, products]);
 
-  // Reset page when category or search changes
   const handleCategoryChange = (cat: string) => {
     setSelectedCategory(cat);
     setCurrentPage(1);
@@ -99,10 +107,32 @@ export default function ProductsPage() {
     return filteredAndSortedProducts.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredAndSortedProducts, currentPage]);
 
-  if (products.length === 0) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-muted-slate">Loading products...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-3">
+          <RefreshCw className="animate-spin text-accent-blue" size={32} />
+          <p className="text-sm font-semibold text-muted-slate">LOADING PRODUCTS...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="max-w-md w-full p-8 border border-red-200 text-center">
+          <AlertCircle size={40} className="mx-auto text-red-500 mb-3" />
+          <h2 className="text-lg font-bold text-slate-dark mb-2">Failed to load products</h2>
+          <p className="text-xs text-red-700 mb-5 leading-relaxed">{error}</p>
+          <button
+            onClick={fetchProductList}
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold bg-slate-dark text-white hover:bg-[#1a2d48] transition-colors cursor-pointer"
+          >
+            <RefreshCw size={14} />
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -110,7 +140,6 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-white pt-28 pb-20">
       <div className="wrap">
-
         {/* Page Header */}
         <div className="mb-10 text-left">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-dark tracking-tight mb-3">
@@ -138,7 +167,7 @@ export default function ProductsPage() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {paginatedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id || product.slug} product={product} />
               ))}
             </div>
 
@@ -166,16 +195,15 @@ export default function ProductsPage() {
               onClick={() => {
                 setSelectedCategory('All');
                 setSearchQuery('');
-                setSelectedSort('recommend');
+                setSelectedSort('default');
                 setCurrentPage(1);
               }}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-dark text-white hover:bg-[#1a2d48] transition-colors"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-dark text-white hover:bg-[#1a2d48] transition-colors cursor-pointer"
             >
               Reset All Filters
             </button>
           </div>
         )}
-
       </div>
     </div>
   );

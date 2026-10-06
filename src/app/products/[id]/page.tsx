@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getProductById, getRelatedProducts } from '@/data/products';
-import ProductOverview from '@/components/products/ProductOverview';
-import ProductTabs from '@/components/products/ProductTabs';
-import RelatedProducts from '@/components/products/RelatedProducts';
+import { getProductBySlug, getProducts } from '@/services/productApi';
+import { getProductHeroImage, getRelatedProducts } from '@/data/products';
+import ProductDetailClient from '@/components/products/ProductDetailClient';
 import EmailSignup from '@/components/ui/EmailSignup';
 import { Product } from '@/types/product';
 
@@ -16,78 +15,72 @@ interface ProductDetailPageProps {
 }
 
 export async function generateStaticParams() {
-  const products = await fetch('https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/products.json')
-  if (!products.ok) {
+  try {
+    const products = await getProducts();
+    return products.map((product) => ({
+      id: product.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
     return [];
   }
-  const productList: Product[] = await products.json();
-  return productList.map((product) => ({
-    id: product.id,
-  }));
 }
 
 export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const products = await fetch('https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/products.json')
-  if (!products.ok) {
+  try {
+    const product = await getProductBySlug(id);
+    const heroImage = getProductHeroImage(product);
+
     return {
-      title: 'Product Not Found — LUXION',
+      title: `${product.name} — SAOLATEK Systems`,
+      description: product.tagline || product.notes,
+      openGraph: {
+        title: `${product.name} — ${product.tagline || 'SAOLATEK'}`,
+        description: product.tagline || '',
+        images: [
+          {
+            url: heroImage,
+            width: 800,
+            height: 600,
+            alt: product.name,
+          },
+        ],
+      },
+    };
+  } catch (_error) {
+    return {
+      title: 'Product not found - Saolatek',
     };
   }
-  const productList: Product[] = await products.json();
-  const product = getProductById(productList, id);
-
-  if (!product) {
-    return {
-      title: 'Product Not Found — LUXION',
-    };
-  }
-
-  return {
-    title: `${product.name} — LUXION Vision Systems`,
-    description: product.shortDescription,
-    openGraph: {
-      title: `${product.name} — ${product.tagline}`,
-      description: product.shortDescription,
-      images: [
-        {
-          url: product.thumbnail,
-          width: 800,
-          height: 600,
-          alt: product.name,
-        },
-      ],
-    },
-  };
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { id } = await params;
-  const products = await fetch('https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/products.json')
-  if (!products.ok) {
+
+  let product: Product;
+  let allProducts: Product[] = [];
+
+  try {
+    product = await getProductBySlug(id);
+  } catch (error) {
+    console.error(`Product not found: ${id}`, error);
     notFound();
   }
-  const productList: Product[] = await products.json();
-  const product = getProductById(productList, id);
 
-  if (!product) {
-    notFound();
+  try {
+    allProducts = await getProducts();
+  } catch (_error) {
+    allProducts = [product];
   }
 
-  const relatedProducts = getRelatedProducts(productList, product.id, 4);
+  const relatedProducts = getRelatedProducts(allProducts, product.slug, 4);
 
   return (
     <div className="min-h-screen bg-white pt-28 pb-24">
       <div className="wrap">
-
-        {/* 2.1 Overview Section */}
-        <ProductOverview product={product} />
-
-        {/* 2.2 Product Tabs (Product Information & Specifications) */}
-        <ProductTabs product={product} />
-
-        {/* 2.3 Related Products */}
-        <RelatedProducts products={relatedProducts} />
+        {/* Dynamic Client Components coordinating Variant Selector */}
+        <ProductDetailClient product={product} relatedProducts={relatedProducts} />
 
         {/* Enterprise Support & Consultation CTA */}
         <div id="inquiry-section" className="mt-20 p-8 sm:p-12 rounded-3xl bg-linear-to-br from-slate-dark to-[#162a44] text-white shadow-2xl text-center">
@@ -124,7 +117,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -1,85 +1,97 @@
-export type ProductCategory =
-  | 'Gimbal Payloads'
-  | 'EO/IR Sensors'
-  | 'AI Vision Systems'
-  | 'Edge Processors'
-  | 'Accessories & Mounts';
+export type ProductCategory = 'payload' | 'dev_kit';
 
-export type ProductStatus = 'In Stock' | 'Pre-order' | 'Made to Order' | 'Coming Soon';
+export type ProductStatus = 'draft' | 'published' | 'hidden';
 
-export interface InfoBlockParagraph {
-  type: 'paragraph';
-  title?: string;
-  content: string;
-}
+export type MediaKind = 'image' | 'document';
+export type MediaRole = 'hero' | 'gallery' | 'datasheet';
 
-export interface InfoBlockImage {
-  type: 'image';
+export interface Media {
+  id?: string;
+  productId?: string;
+  kind: MediaKind;
+  role?: MediaRole | null;
   url: string;
-  caption?: string;
-  alt?: string;
+  mimeType?: string;
+  alt?: string | null;
+  width?: number | null;
+  height?: number | null;
+  sizeBytes?: number | null;
+  sortOrder?: number;
 }
 
-export interface InfoBlockList {
-  type: 'list';
-  title?: string;
-  items: string[];
+export interface Variant {
+  code: string;
+  name: string;
+  is_default: boolean;
+  sort_order?: number;
 }
 
-export interface InfoBlockQuote {
-  type: 'quote';
-  quote: string;
-  author?: string;
-  role?: string;
-}
+export type SpecValueType =
+  | 'text'
+  | 'number'
+  | 'range'
+  | 'list'
+  | 'axes'
+  | 'key_value'
+  | 'piecewise'
+  | 'optional';
 
-export type ProductInfoBlock =
-  | InfoBlockParagraph
-  | InfoBlockImage
-  | InfoBlockList
-  | InfoBlockQuote;
-
-export interface QuickSpecs {
-  processor: string;
-  powerSupply: string;
-  dimensions: string;
-  weight: string;
-  operatingTemp: string;
-  stabilization: string;
-  sensorType: string;
-  interface: string;
+export interface SpecValue {
+  display: string;
+  data?: any;
+  note?: string | null;
 }
 
 export interface SpecItem {
+  definition_id?: string;
+  key: string;
   label: string;
-  value: string;
+  value_type: SpecValueType;
+  is_highlight: boolean;
+  sort_order?: number;
+  values: Record<string, SpecValue>;
 }
 
-export interface SpecCategory {
-  category: string;
+export interface SpecGroup {
+  key: string;
+  title: string;
+  sort_order?: number;
   items: SpecItem[];
+}
+
+export interface PackagePrice {
+  amount: string;
+  currency: string;
+}
+
+export interface Package {
+  id?: string;
+  code: string;
+  name: string;
+  includes_package_id?: string | null;
+  contents: string[];
+  price?: PackagePrice | null;
 }
 
 export interface Product {
   id: string;
+  slug: string;
   name: string;
-  tagline: string;
+  tagline?: string | null;
   category: ProductCategory;
-  price: number;
-  priceDisplay: string;
-  rating: number;
-  reviewCount: number;
-  isTopSeller: boolean;
-  isRecommended: boolean;
+  is_name_provisional?: boolean;
+  is_placeholder?: boolean;
   status: ProductStatus;
-  introThumbnail: string;
-  thumbnail: string;
-  images: string[];
-  shortDescription: string;
-  highlights: string[];
-  quickSpecs: QuickSpecs;
-  informationBlocks: ProductInfoBlock[];
-  overallSpecifications: SpecCategory[];
+  sort_order?: number;
+  published_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  notes?: string | null;
+  variants: Variant[];
+  spec_groups: SpecGroup[];
+  packages?: Package[];
+  images?: Media[];
+  documents?: Media[];
 }
 
-export type SortOption = 'recommend' | 'top-seller' | 'price-asc' | 'price-desc';
+export type SortOption = 'default' | 'name-asc' | 'name-desc' | 'newest';

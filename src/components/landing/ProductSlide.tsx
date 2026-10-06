@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import ProductCard from '../products/ProductCard';
 import { ProductCategory, Product } from '@/types/product';
+import { CATEGORY_LABELS } from '@/data/products';
 
 interface ProductSlideProps {
   categories: ProductCategory[];
@@ -26,7 +27,7 @@ interface ProductSlideProps {
 }
 
 export default function ProductSlide({ categories, products }: ProductSlideProps) {
-  const [activeCategory, setActiveCategory] = useState<ProductCategory>(categories[0]);
+  const [activeCategory, setActiveCategory] = useState<ProductCategory>(categories[0] || 'payload');
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const filteredProducts = products.filter((product) => product.category === activeCategory);
@@ -49,17 +50,21 @@ export default function ProductSlide({ categories, products }: ProductSlideProps
       <div className="wrap">
         <div className="w-full">
           {/* Tabs */}
-          <div className="flex mb-8 justify-center text-[19px]">
+          <div className="flex mb-8 justify-center text-[19px] gap-6">
             {categories.map((category) => (
               <button
                 key={category}
-                className={`px-4 pb-2 font-semibold ${activeCategory === category ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600'}`}
+                className={`px-4 pb-2 font-semibold cursor-pointer transition-colors ${
+                  activeCategory === category
+                    ? 'border-b-2 border-accent-blue text-accent-blue'
+                    : 'text-gray-600 hover:text-slate-dark'
+                }`}
                 onClick={() => {
                   setActiveCategory(category);
                   setCurrentIndex(0); // Reset index when changing category
                 }}
               >
-                {category}
+                {CATEGORY_LABELS[category] || category}
               </button>
             ))}
           </div>
@@ -68,15 +73,21 @@ export default function ProductSlide({ categories, products }: ProductSlideProps
           <div className="relative">
             <div className="flex overflow-hidden">
               <motion.div
-                className="flex transition-transform duration-500"
+                className="flex transition-transform duration-500 w-full"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
                 {filteredProducts.length > 0 ? (
                   productSlides.map((slide, slideIndex) => (
                     <div key={slideIndex} className="min-w-full flex flex-wrap justify-center">
                       {slide.map((product) => (
-                        <div key={product.id} className="w-full p-2 sm:w-1/2 lg:w-1/4">
-                          <ProductCard product={product} productNameSize="sm" isBorderVisible={false} isTaglineVisible={false} isFooterVisible={false} />
+                        <div key={product.id || product.slug} className="w-full p-2 sm:w-1/2 lg:w-1/4">
+                          <ProductCard
+                            product={product}
+                            productNameSize="sm"
+                            isBorderVisible={false}
+                            isTaglineVisible={false}
+                            isFooterVisible={false}
+                          />
                         </div>
                       ))}
                     </div>
@@ -91,16 +102,18 @@ export default function ProductSlide({ categories, products }: ProductSlideProps
             {productSlides.length > 1 && (
               <>
                 <button
-                  className="absolute left-0 top-1/2 transform -translate-x-3/4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+                  className="absolute left-0 top-1/2 transform -translate-x-3/4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
+                  aria-label="Previous slide"
                 >
                   <ArrowLeft size={20} />
                 </button>
                 <button
-                  className="absolute right-0 top-1/2 transform translate-x-3/4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+                  className="absolute right-0 top-1/2 transform translate-x-3/4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                   onClick={handleNext}
                   disabled={currentIndex >= lastSlideIndex}
+                  aria-label="Next slide"
                 >
                   <ArrowRight size={20} />
                 </button>
@@ -111,8 +124,8 @@ export default function ProductSlide({ categories, products }: ProductSlideProps
           {/* View All Button */}
           <div className="mt-4 text-right">
             <a
-              href={`/products`}
-              className="text-blue-500 font-semibold hover:underline"
+              href="/products"
+              className="text-accent-blue font-semibold hover:underline text-sm inline-flex items-center gap-1"
             >
               View All
             </a>
