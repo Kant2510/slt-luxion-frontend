@@ -6,10 +6,10 @@ export const revalidate = 3600;
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string; locale: string }>;
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const { id, locale } = await params;
-  const post = await getBlogPostById(locale, id);
+  const { id } = await params;
+  const post = await getBlogPostById(id);
 
   if (!post) {
     return { title: "Not Found | Saolatek" };
@@ -30,7 +30,7 @@ export async function generateMetadata({
       description,
       images: [{ url: ogImage, width: 1200, height: 630 }],
       type: "article",
-      locale: locale === "vi" ? "vi_VN" : "en_US",
+      locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",

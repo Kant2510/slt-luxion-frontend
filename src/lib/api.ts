@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 type ApiRequestInit = RequestInit & {
   next?: {
@@ -11,10 +11,6 @@ export async function apiFetch<T>(
   endpoint: string,
   options?: ApiRequestInit
 ): Promise<T> {
-  if (!API_URL) {
-    throw new Error("API URL is not defined");
-  }
-
   const isFormData =
     typeof FormData !== "undefined" && options?.body instanceof FormData;
 
@@ -34,11 +30,16 @@ export async function apiFetch<T>(
     method === "GET"
       ? {
           next: { revalidate: 3600 },
+          credentials: "include",
           ...options,
         }
-      : options ?? {};
+      : {
+          credentials: "include",
+          ...(options ?? {}),
+        };
 
   const response = await fetch(url, {
+    credentials: "include",
     ...fetchOptions,
     headers: customHeaders,
   });
