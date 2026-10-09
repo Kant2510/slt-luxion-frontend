@@ -27,6 +27,7 @@ public/gemini/*
 .next/
 out/
 
+.env
 
 AGENTS.md
 CLAUDE.md
