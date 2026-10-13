@@ -490,7 +490,7 @@ export const PLATFORM_DEVKIT_L1: PlatformPageData = {
     description:
       'When your payload is ready to fly, our engineers turn it into a production-grade gimbal through custom engineering (NRE) or joint R&D.',
     ctaLabel: 'Explore custom engineering',
-    ctaHref: '/#contact',
+    ctaHref: '/custom-project',
   },
   faq: {
     id: 'faq',
@@ -664,7 +664,7 @@ export const PLATFORM_VORIS: PlatformPageData = {
     ],
     cta: {
       label: 'Train it on your targets',
-      href: '/#contact',
+      href: '/custom-project',
     },
     sideContent: {
       type: 'imagePlaceholder',
@@ -877,7 +877,7 @@ export const PLATFORM_VORIS: PlatformPageData = {
     description:
       'Different interface, AI model trained on your targets, or a new sensor — our engineers adapt Voris to your platform through custom engineering (NRE).',
     ctaLabel: 'Explore custom engineering',
-    ctaHref: '/#contact',
+    ctaHref: '/custom-project',
   },
   quoteForm: {
     id: 'quote',

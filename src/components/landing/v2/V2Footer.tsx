@@ -25,16 +25,19 @@ export default function V2Footer() {
             aria-label="Footer"
             className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium"
           >
-            <a className={navLinkClass} href="#how-we-work">
+            <a className={navLinkClass} href="/#how-we-work">
               How We Work
             </a>
-            <a className={navLinkClass} href="#capabilities">
+            <a className={navLinkClass} href="/#capabilities">
               Capabilities
             </a>
-            <a className={navLinkClass} href="#platforms">
+            <a className={navLinkClass} href="/#platforms">
               Platforms
             </a>
-            <a className={navLinkClass} href="#contact">
+            <a className={navLinkClass} href="/custom-project">
+              Custom Project
+            </a>
+            <a className={navLinkClass} href="/#contact">
               Contact
             </a>
             <a
@@ -52,7 +55,7 @@ export default function V2Footer() {
         <div className="flex flex-wrap justify-between items-center gap-4 border-t border-white/6 pt-6 text-[13px] text-white/50">
           <span>&copy; {new Date().getFullYear()} LUXION · contact@luxion.ai</span>
           <span className="hidden sm:inline">Export compliance notice — pending legal review</span>
-          <a className={`${navLinkClass} text-[13px]`} href="#contact">
+          <a className={`${navLinkClass} text-[13px]`} href="/#contact">
             Privacy Policy
           </a>
         </div>
