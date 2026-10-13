@@ -17,7 +17,7 @@ export default function V2Header() {
     <header className="sticky top-0 z-30 bg-[#00061A]/75 backdrop-blur-md border-b border-white/6 transition-all duration-300">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-8 lg:px-12 py-4 flex items-center justify-between gap-4">
         {/* Logo */}
-        <Link href="#home" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <img
             src="/images/logo.png"
             alt="LUXION — From Light to Intelligence"
@@ -30,10 +30,10 @@ export default function V2Header() {
           aria-label="Main"
           className="hidden md:flex items-center gap-7 lg:gap-9 text-sm tracking-[0.04em] font-sans"
         >
-          <a className={navLinkClass} href="#how-we-work">
+          <a className={navLinkClass} href="/#how-we-work">
             How We Work
           </a>
-          <a className={navLinkClass} href="#capabilities">
+          <a className={navLinkClass} href="/#capabilities">
             Capabilities
           </a>
 
@@ -41,7 +41,7 @@ export default function V2Header() {
           <div className="relative group">
             <a
               className={`${navLinkClass} inline-flex items-center gap-1.5 cursor-pointer`}
-              href="#platforms"
+              href="/#platforms"
               aria-haspopup="true"
             >
               Platforms
@@ -65,11 +65,11 @@ export default function V2Header() {
                   {/* Dev Kit L1 */}
                   <Link
                     className="group/item p-3 rounded-lg flex flex-col gap-1.5 no-underline text-white transition-colors duration-250 hover:bg-white/[0.06]"
-                    href="/products/dev-kit-l1"
+                    href="/platforms/dev-kit-l1"
                   >
                     <span className="h-24 rounded-md overflow-hidden flex items-center justify-center bg-[radial-gradient(60%_60%_at_50%_55%,rgba(0,95,255,0.25)_0%,rgba(0,15,67,0.4)_60%,rgba(0,6,26,0)_100%)]">
                       <img
-                        src="/images/products/dev-kit-l1.webp"
+                        src="https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/luxion/images/products/dev-kit-l1.webp"
                         alt="Dev Kit L1"
                         className="h-[84px] w-auto object-contain transition-transform duration-500 group-hover/item:scale-108"
                       />
@@ -85,11 +85,11 @@ export default function V2Header() {
                   {/* Voris VR10 */}
                   <Link
                     className="group/item p-3 rounded-lg flex flex-col gap-1.5 no-underline text-white transition-colors duration-250 hover:bg-white/[0.06]"
-                    href="/products/voris-vr10"
+                    href="/platforms/voris"
                   >
                     <span className="h-24 rounded-md overflow-hidden flex items-center justify-center bg-[radial-gradient(60%_60%_at_50%_55%,rgba(0,95,255,0.25)_0%,rgba(0,15,67,0.4)_60%,rgba(0,6,26,0)_100%)]">
                       <img
-                        src="/images/products/voris-vr10.webp"
+                        src="https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/luxion/images/products/voris-vr10.webp"
                         alt="Voris VR10"
                         className="h-[80px] w-auto object-contain transition-transform duration-500 group-hover/item:scale-108"
                       />
@@ -106,11 +106,11 @@ export default function V2Header() {
                   {/* Avior */}
                   <a
                     className="group/item p-3 rounded-lg flex flex-col gap-1.5 no-underline text-white transition-colors duration-250 hover:bg-white/[0.06]"
-                    href="#platforms"
+                    href="/#platforms"
                   >
                     <span className="h-24 rounded-md overflow-hidden flex items-center justify-center bg-[radial-gradient(60%_60%_at_50%_55%,rgba(0,95,255,0.25)_0%,rgba(0,15,67,0.4)_60%,rgba(0,6,26,0)_100%)]">
                       <img
-                        src="/images/products/avior.webp"
+                        src="https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/luxion/images/products/avior.webp"
                         alt="Avior"
                         className="h-[84px] w-auto object-contain opacity-70 transition-transform duration-500 group-hover/item:scale-108"
                       />
@@ -126,7 +126,7 @@ export default function V2Header() {
 
                 <a
                   className={`${navLinkClass} self-start mx-3 my-1 text-[13px] font-medium`}
-                  href="#platforms"
+                  href="/#platforms"
                 >
                   All platforms →
                 </a>
@@ -134,14 +134,14 @@ export default function V2Header() {
             </div>
           </div>
 
-          <a className={navLinkClass} href="#team">
+          <a className={navLinkClass} href="/#team">
             Team
           </a>
         </nav>
 
         {/* CTA Button */}
         <div className="hidden sm:flex items-center gap-3">
-          <a className={`${primaryBtnClass} px-4.5 py-2.5`} href="#contact">
+          <a className={`${primaryBtnClass} px-4.5 py-2.5`} href="/#contact">
             Bring Us Your Challenge
           </a>
         </div>
@@ -162,35 +162,35 @@ export default function V2Header() {
         <div className="md:hidden bg-[#00061A]/98 border-b border-white/10 px-6 py-6 flex flex-col gap-4 text-base">
           <a
             className="text-white/80 hover:text-white py-2 border-b border-white/5"
-            href="#how-we-work"
+            href="/#how-we-work"
             onClick={() => setMobileMenuOpen(false)}
           >
             How We Work
           </a>
           <a
             className="text-white/80 hover:text-white py-2 border-b border-white/5"
-            href="#capabilities"
+            href="/#capabilities"
             onClick={() => setMobileMenuOpen(false)}
           >
             Capabilities
           </a>
           <a
             className="text-white/80 hover:text-white py-2 border-b border-white/5"
-            href="#platforms"
+            href="/#platforms"
             onClick={() => setMobileMenuOpen(false)}
           >
             Platforms
           </a>
           <a
             className="text-white/80 hover:text-white py-2 border-b border-white/5"
-            href="#team"
+            href="/#team"
             onClick={() => setMobileMenuOpen(false)}
           >
             Team
           </a>
           <a
             className={`${primaryBtnClass} justify-center px-4 py-3 font-bold mt-2 text-center`}
-            href="#contact"
+            href="/#contact"
             onClick={() => setMobileMenuOpen(false)}
           >
             Bring Us Your Challenge

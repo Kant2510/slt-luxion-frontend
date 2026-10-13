@@ -10,7 +10,7 @@ export default function Footer() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (pathname === '/') {
+  if (pathname === '/' || pathname.startsWith('/platforms')) {
     return null;
   }
 

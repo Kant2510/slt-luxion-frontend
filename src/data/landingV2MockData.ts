@@ -208,7 +208,7 @@ export const PLATFORMS_MOCK: PlatformItem[] = [
     tagline: 'Open 3-axis gimbal development platform',
     badge: 'NOV 2026',
     image: 'https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/luxion/images/products/dev-kit-l1.webp',
-    href: '/products/dev-kit-l1',
+    href: '/platforms/dev-kit-l1',
     ctaText: 'Explore Dev Kit L1',
     specs: [
       { label: 'Open source', value: 'Firmware · Schematic · CAD' },
@@ -223,7 +223,7 @@ export const PLATFORMS_MOCK: PlatformItem[] = [
     tagline: '4K zoom payload with on-board AI · VR20 coming soon',
     badge: 'READY TO ORDER',
     image: 'https://caungeseokknvmeoqoto.supabase.co/storage/v1/object/public/saolatek/luxion/images/products/voris-vr10.webp',
-    href: '/products/voris-vr10',
+    href: '/platforms/voris',
     ctaText: 'Explore Voris',
     specs: [
       { label: 'Zoom', value: '40X (10X optical + 4X digital)' },

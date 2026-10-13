@@ -93,7 +93,7 @@ export default function Navbar() {
     </>
   );
 
-  if (pathname === '/') {
+  if (pathname === '/' || pathname.startsWith('/platforms')) {
     return null;
   }
 
