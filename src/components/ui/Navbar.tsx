@@ -93,6 +93,10 @@ export default function Navbar() {
     </>
   );
 
+  if (pathname === '/') {
+    return null;
+  }
+
   return (
     <>
       <motion.nav

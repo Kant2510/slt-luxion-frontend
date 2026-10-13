@@ -1,11 +1,18 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 
 export default function Footer() {
+  const pathname = usePathname();
+
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  if (pathname === '/') {
+    return null;
+  }
 
   return (
     <footer className="bg-[#07111f] text-[#8ea0b8] py-10 text-xs sm:text-sm border-t border-white/5">

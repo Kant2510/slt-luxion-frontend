@@ -11,6 +11,8 @@
   --color-text-secondary: #b9c7d9;
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-display: var(--font-space-grotesk), monospace;
+  --font-eurostile: "Eurostile Extended Black", var(--font-space-grotesk), system-ui, sans-serif;
+  --font-square: "Square", system-ui, sans-serif;
 }
 
 @layer base {
@@ -127,3 +129,21 @@ body::before {
     #000 55%
   );
 }
+
+/* ========================================================
+   LUXION V2 (Light & Dark) Specific Styles & Animations
+   ======================================================== */
+@font-face {
+  font-family: "Eurostile Extended Black";
+  src: url("/fonts/eurostile.ttf");
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Square";
+  src: url("/fonts/square.otf");
+  font-weight: 400;
+  font-display: swap;
+}
+
